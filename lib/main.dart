@@ -2,6 +2,7 @@ import 'package:aquanet_mobile/states/globalState.dart';
 import 'package:flutter/material.dart';
 import 'package:aquanet_mobile/pages/history_page.dart';
 import 'package:aquanet_mobile/pages/SplashScreen.dart';
+import 'package:aquanet_mobile/services/sensor_data_service.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -9,6 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
     await GlobalState().loadPrefs();
+
     final isLoggedIn = GlobalState().isLoggedIn;
     runApp(MyApp(isLoggedIn: isLoggedIn));
   } catch (err) {

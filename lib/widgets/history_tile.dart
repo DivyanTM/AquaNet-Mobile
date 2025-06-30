@@ -7,6 +7,7 @@ class HistoryTile extends StatelessWidget {
   final String temperature;
   final String conductivity;
   final String turbidity;
+  final String datetime;
 
   const HistoryTile({
     super.key,
@@ -15,6 +16,7 @@ class HistoryTile extends StatelessWidget {
     required this.temperature,
     required this.conductivity,
     required this.turbidity,
+    required this.datetime,
   });
 
   @override
@@ -29,7 +31,7 @@ class HistoryTile extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        "2025-06-30 13;25 54",
+        "${datetime}",
         style: TextStyle(
           fontFamily: 'Roboto',
           color: Colors.grey,
