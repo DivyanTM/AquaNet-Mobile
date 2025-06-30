@@ -21,7 +21,13 @@ class SensorBox extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DetailsPage()),
+          MaterialPageRoute(
+            builder: (context) => DetailsPage(
+              param: title,
+              value: value.replaceAll(RegExp(r'[^0-9.]'), ''),
+              icon: icon,
+            ),
+          ),
         );
       },
       child: Container(

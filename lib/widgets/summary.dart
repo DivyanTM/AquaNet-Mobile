@@ -1,20 +1,49 @@
 import 'package:flutter/material.dart';
 
 class SummaryContent extends StatefulWidget {
-  const SummaryContent({super.key});
+  final String average;
+  final double min;
+  final double max;
+  final String param;
+
+  const SummaryContent({
+    super.key,
+    required this.average,
+    required this.min,
+    required this.max,
+    required this.param,
+  });
 
   @override
   State<SummaryContent> createState() => _SummaryContentState();
 }
 
 class _SummaryContentState extends State<SummaryContent> {
+  String unit = "";
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      if (widget.param == "Temperature") {
+        unit = "°C";
+      } else if (widget.param == "Turbidity") {
+        unit = "NTU";
+      } else if (widget.param == "Conductivity") {
+        unit = "µS/cm";
+      } else {
+        unit = "";
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 30),
-        Row(
+        const SizedBox(height: 30),
+        const Row(
           children: [
             Text(
               "Summary",
@@ -27,13 +56,13 @@ class _SummaryContentState extends State<SummaryContent> {
             ),
           ],
         ),
-        SizedBox(height: 30),
+        const SizedBox(height: 30),
         // Divider(),
         Padding(
-          padding: EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(5.0),
           child: Row(
             children: [
-              Text(
+              const Text(
                 "Average",
                 style: TextStyle(
                   fontSize: 15,
@@ -41,10 +70,10 @@ class _SummaryContentState extends State<SummaryContent> {
                   fontFamily: 'Roboto',
                 ),
               ),
-              SizedBox(width: 30),
+              const SizedBox(width: 30),
               Text(
-                "21°C",
-                style: TextStyle(
+                "${widget.average} $unit",
+                style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w300,
                   fontFamily: 'Roboto',
@@ -53,12 +82,12 @@ class _SummaryContentState extends State<SummaryContent> {
             ],
           ),
         ),
-        Divider(),
+        const Divider(),
         Padding(
-          padding: EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(5.0),
           child: Row(
             children: [
-              Text(
+              const Text(
                 "Range",
                 style: TextStyle(
                   fontSize: 15,
@@ -66,10 +95,10 @@ class _SummaryContentState extends State<SummaryContent> {
                   fontFamily: 'Roboto',
                 ),
               ),
-              SizedBox(width: 30),
+              const SizedBox(width: 30),
               Text(
-                "20°C - 30°C",
-                style: TextStyle(
+                "${widget.min} $unit - ${widget.max} $unit",
+                style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w300,
                   fontFamily: 'Roboto',
@@ -78,8 +107,8 @@ class _SummaryContentState extends State<SummaryContent> {
             ],
           ),
         ),
-        Divider(),
-        Padding(
+        const Divider(),
+        const Padding(
           padding: EdgeInsets.all(5.0),
           child: Row(
             children: [

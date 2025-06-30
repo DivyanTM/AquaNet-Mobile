@@ -209,7 +209,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       SensorBox(
                         title: "Temperature",
-                        value: "${data["temperature"]}°C",
+                        value: "${data["temperature"]} °C",
                         icon: FeatherIcons.thermometer,
                         textcolor: getSensorColor(
                           value: (data['temperature'] as num).toDouble(),
