@@ -14,6 +14,7 @@ import 'package:aquanet_mobile/states/globalState.dart';
 import 'package:aquanet_mobile/services/sensor_data_service.dart';
 
 import 'history_page.dart';
+import 'package:aquanet_mobile/services/socket_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,6 +25,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final DataService dataService = DataService();
+  final socketService = SocketService();
+
   int _selectedIndex = 0;
   bool isLoading = true;
   Map<String, dynamic> data = {
@@ -95,6 +98,90 @@ class _HomePageState extends State<HomePage> {
       overlays: [SystemUiOverlay.top],
     );
     _fetch();
+    socketService.connect(
+      onMessage: (d) {
+        final latest = json.decode(d) as Map<String, dynamic>;
+
+        final tempScore = dataService.calculateWaterQualityScore(
+          ph: (latest['ph'] as num).toDouble(),
+          temperature: (latest['temperature'] as num).toDouble(),
+          conductivity: (latest['conductivity'] as num).toDouble(),
+          turbidity: (latest['turbidity'] as num).toDouble(),
+        );
+
+        setState(() {
+          data = latest;
+          score = tempScore;
+          percent = score / 100.0;
+
+          if (score > 80) {
+            status = "Good";
+          } else if (score > 60) {
+            status = "Moderate";
+          } else {
+            status = "Poor";
+          }
+
+          isLoading = false;
+        });
+
+        print("Score: $score");
+        print("Status: $status");
+      },
+      onAlert: (d) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Alert',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'The following water quality parameters exceeded or below the safe limits, please make alternate arrangements.\n ${d.toString()}',
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('OK'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    socketService.disconnect();
+    super.dispose();
   }
 
   @override
