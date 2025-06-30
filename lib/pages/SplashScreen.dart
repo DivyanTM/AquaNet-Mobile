@@ -1,8 +1,13 @@
+// import 'package:aquanet_mobile/pages/home_page.dart';
 import 'package:aquanet_mobile/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter/cupertino.dart';
+// import 'package:aquanet_mobile/pages/register_page.dart';
+import 'package:aquanet_mobile/pages/login_page.dart';
+
+import '../states/globalState.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -12,6 +17,8 @@ class Splashscreen extends StatefulWidget {
 }
 
 class _SplashscreenState extends State<Splashscreen> {
+  final isLoggedIn = GlobalState().isLoggedIn;
+
   @override
   void initState() {
     super.initState();
@@ -28,7 +35,10 @@ class _SplashscreenState extends State<Splashscreen> {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(
+          builder: (context) =>
+              isLoggedIn ? const HomePage() : const LoginPage(),
+        ),
       );
     });
   }

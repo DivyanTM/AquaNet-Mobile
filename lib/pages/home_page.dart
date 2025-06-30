@@ -1,3 +1,4 @@
+import 'package:aquanet_mobile/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:aquanet_mobile/widgets/bottom_nav.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -5,6 +6,8 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:aquanet_mobile/widgets/home_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aquanet_mobile/states/globalState.dart';
 
 import 'history_page.dart';
 
@@ -66,7 +69,20 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   Spacer(),
-                  Icon(FeatherIcons.user, size: 25, color: Colors.black),
+                  GestureDetector(
+                    onLongPress: () {
+                      GlobalState().clearPrefs();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    child: Icon(
+                      FeatherIcons.user,
+                      size: 25,
+                      color: Colors.black,
+                    ),
+                  ),
                 ],
               ),
             ),
